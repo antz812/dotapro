@@ -1,0 +1,64 @@
+load_dota2_data <- function() {
+  file_path <- "C:/Users/PC/OneDrive/Desktop/preA2/hero_stats.csv"
+  data <- read.csv(file_path)
+  return(data)
+}
+
+# View
+
+dota2_data <- load_dota2_data()
+head(dota2_data)
+
+
+
+
+# Average for most played heros
+
+calculate_averages <- function(data) {
+  avg_kills <- mean(data$Kills, na.rm = TRUE)
+  avg_deaths <- mean(data$Deaths, na.rm = TRUE)
+  return(list(Average_Kills = avg_kills, Average_Deaths = avg_deaths))
+}
+
+averages <- calculate_averages(dota2_data)
+averages
+
+
+
+
+
+# Install packages
+
+install.packages("ggplot2")
+library(ggplot2)
+
+
+
+
+
+
+# Create dataframe
+
+hero_data <- data.frame(
+  Hero_Name = c("Pudge", "Invoker", "Sniper", "Juggernaut", "Phantom Lancer", 
+                "Crystal Maiden", "Storm Spirit", "Tiny", "Anti-Mage", "Lina"),
+  Kills = c(4500, 4200, 4000, 3900, 3850, 3800, 3750, 3700, 3650, 3600),
+  Deaths = c(3200, 3100, 3000, 2900, 2950, 2850, 2800, 2750, 2700, 2650)
+)
+hero_data
+
+
+
+ibrary(ggplot2)
+# Create plot
+
+ggplot(hero_data, aes(x = reorder(Hero_Name, -Kills))) +
+  geom_bar(aes(y = Kills), stat = "identity", fill = "blue", alpha = 0.7) +
+  geom_bar(aes(y = Deaths), stat = "identity", fill = "red", alpha = 0.5) +
+  labs(title = "Top 10 Dota 2 Heroes: Kills vs Deaths",
+       x = "Hero Name",
+       y = "Stats") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  guides(fill = guide_legend(title = "Metrics"))
